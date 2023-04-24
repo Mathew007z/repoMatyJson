@@ -3,7 +3,7 @@ let total = 0;
 let arrayCarrito = [];
 const carritoContainer = document.getElementById("carrito-de-compras");
 const botonVaciar = document.getElementById('eliminar-carrito');
-const precioTotal = document.getElementById('precioTotal');
+const precioTotal = document.getElementById('precio-total');
 // Items para cumplir de la entrega
 // 1 - Funciones del carritto
 // 2 - Capturar eventos y salida por DOM de se agrego producto por ej.
