@@ -4,6 +4,7 @@ let arrayCarrito = [];
 const carritoContainer = document.getElementById("carrito-de-compras");
 const botonVaciar = document.getElementById('eliminar-carrito');
 const precioTotal = document.getElementById('precio-total');
+let modalCounter = document.getElementById('btn-menu');
 // Items para cumplir de la entrega
 // 1 - Funciones del carritto
 // 2 - Capturar eventos y salida por DOM de se agrego producto por ej.
@@ -13,10 +14,20 @@ const precioTotal = document.getElementById('precio-total');
 
 // Abre entrega, 25 abril, hasta el 2 de mayo.
 
+// DOMContentLoaded
+function aJson (){
+  if(localStorage.getItem('cart')){
+      arrayCarrito = JSON.parse(localStorage.getItem('cart'));
+      renderizarCarrito();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   boxCreate();
+  aJson()
+  obtenerObjetos()
 });
+
 
 //.JSON
 async function obtenerObjetos() {
@@ -27,7 +38,7 @@ async function obtenerObjetos() {
   boxCreate();
 }
 
-obtenerObjetos();
+
 
 function boxCreate() {
   const contenedorProductos = document.getElementById("container-productos");
@@ -68,6 +79,7 @@ function pushearCarrito(id) {
   } else {
     arrayCarrito.push({ ...producto, cantidad: 1 });
   }
+  localStorage.setItem('cart', JSON.stringify(arrayCarrito));
   renderizarCarrito();
 }
 // renderizamos el carrito
@@ -94,7 +106,7 @@ function renderizarCarrito() {
       eliminarDelCarrito(producto.id);
     });
     
-
+    
     precioTotal.innerText = arrayCarrito.reduce((acc,producto) => acc + producto.cantidad * producto.precio, 0);
     console.log(precioTotal.innerText);
   });
@@ -117,6 +129,7 @@ function eliminarDelCarrito(id) {
   }
 
   precioTotal.textContent = arrayCarrito.reduce((acc, producto) => acc - producto.precio,0);
+  localStorage.setItem('cart', JSON.stringify(arrayCarrito));
 
   renderizarCarrito();
 }
@@ -127,6 +140,7 @@ botonVaciar.addEventListener('click', () => {
  alert('se vacio del carrito')
   arrayCarrito.length = 0;
   precioTotal.innerText = arrayCarrito.reduce((acc,producto) => acc - producto.precio, 0);
+  localStorage.setItem('cart', JSON.stringify(arrayCarrito));
   renderizarCarrito();
 })
 
