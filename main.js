@@ -5,28 +5,40 @@ const carritoContainer = document.getElementById("carrito-de-compras");
 const botonVaciar = document.getElementById('eliminar-carrito');
 const precioTotal = document.getElementById('precio-total');
 let modalCounter = document.getElementById('btn-menu');
+let buttonCompra = document.getElementById("comprar-btn")
 // Items para cumplir de la entrega
-// 1 - Funciones del carritto
-// 2 - Capturar eventos y salida por DOM de se agrego producto por ej.
-// 3 - Implementar un loading.
-// 4 - STORAGE y JSON.
-// 5 - Implementar libreria externa.
-
 // Abre entrega, 25 abril, hasta el 2 de mayo.
 
-// DOMContentLoaded
-function aJson (){
-  if(localStorage.getItem('cart')){
-      arrayCarrito = JSON.parse(localStorage.getItem('cart'));
-      renderizarCarrito();
-  }
-}
+buttonCompra.addEventListener('click', ()=> {
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Gracias por tu compra!',
+    showConfirmButton: false,
+    timer: 1500
+  })
+  arrayCarrito.length = 0;
+  precioTotal.innerText = 0;
+  renderizarCarrito()
+})
 
+
+
+
+// DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   boxCreate();
-  aJson()
-  obtenerObjetos()
+  aJson();
+  obtenerObjetos();
 });
+
+//crear una funcion
+function aJson(){
+  if(localStorage.getItem('cart')){
+    arrayCarrito = JSON.parse(localStorage.getItem('cart'))
+    renderizarCarrito()
+  }
+}
 
 
 //.JSON
@@ -56,7 +68,13 @@ function boxCreate() {
     // agregamos funcionalidad al boton
     const agregar = document.getElementById(`button${prod.id}`);
     agregar.addEventListener("click", () => {
-      alert(`se agrego producto al carrito ${prod.nombre}`);
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Tu producto fue agregado correctamente',
+        showConfirmButton: false,
+        timer: 1500
+      })
       pushearCarrito(`${prod.id}`);
     });
   });
@@ -79,7 +97,7 @@ function pushearCarrito(id) {
   } else {
     arrayCarrito.push({ ...producto, cantidad: 1 });
   }
-  localStorage.setItem('cart', JSON.stringify(arrayCarrito));
+  localStorage.setItem('cart',JSON.stringify(arrayCarrito))
   renderizarCarrito();
 }
 // renderizamos el carrito
@@ -103,12 +121,19 @@ function renderizarCarrito() {
     carritoContainer.appendChild(productoContainer);
     const eliminar = document.getElementById(`eliminar${producto.id}`);
     eliminar.addEventListener("click", (id) => {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Tu producto fue eliminado correctamente',
+        showConfirmButton: false,
+        timer: 1500
+      })
       eliminarDelCarrito(producto.id);
     });
     
     
     precioTotal.innerText = arrayCarrito.reduce((acc,producto) => acc + producto.cantidad * producto.precio, 0);
-    console.log(precioTotal.innerText);
+  
   });
 }
 
@@ -129,7 +154,7 @@ function eliminarDelCarrito(id) {
   }
 
   precioTotal.textContent = arrayCarrito.reduce((acc, producto) => acc - producto.precio,0);
-  localStorage.setItem('cart', JSON.stringify(arrayCarrito));
+  localStorage.setItem('cart',JSON.stringify(arrayCarrito));
 
   renderizarCarrito();
 }
@@ -140,7 +165,7 @@ botonVaciar.addEventListener('click', () => {
  alert('se vacio del carrito')
   arrayCarrito.length = 0;
   precioTotal.innerText = arrayCarrito.reduce((acc,producto) => acc - producto.precio, 0);
-  localStorage.setItem('cart', JSON.stringify(arrayCarrito));
+  localStorage.setItem('cart',JSON.stringify(arrayCarrito))
   renderizarCarrito();
 })
 
